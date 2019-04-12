@@ -1,4 +1,4 @@
-package com.uberaemos.ekmeksizdiettracker.jwt.resource;
+package com.uberaemos.ekmeksizdiettracker.resource.jwt;
 public class AuthenticationException extends RuntimeException {
     public AuthenticationException(String message, Throwable cause) {
         super(message, cause);

@@ -1,4 +1,4 @@
-package com.uberaemos.ekmeksizdiettracker.jwt.resource;
+package com.uberaemos.ekmeksizdiettracker.resource.jwt;
 
 import java.io.Serializable;
 

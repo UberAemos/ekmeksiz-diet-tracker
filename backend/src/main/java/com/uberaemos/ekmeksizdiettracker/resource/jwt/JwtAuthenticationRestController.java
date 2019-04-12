@@ -1,4 +1,4 @@
-package com.uberaemos.ekmeksizdiettracker.jwt.resource;
+package com.uberaemos.ekmeksizdiettracker.resource.jwt;
 
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ import com.uberaemos.ekmeksizdiettracker.jwt.JwtTokenUtil;
 import com.uberaemos.ekmeksizdiettracker.jwt.JwtUserDetails;
 
 @RestController
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins="http://localhost:3000")
 public class JwtAuthenticationRestController {
 
   @Value("${jwt.http.request.header}")
