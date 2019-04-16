@@ -8,12 +8,11 @@ export default class SignUpComponent extends Component {
 
     this.createUser = this.createUser.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
-    this.validate = this.validate.bind(this)
+    //this.validate = this.validate.bind(this)
   }
 
   createUser(values) {
     let user = {
-      name: values.name,
       username: values.username,
       password: values.password
     }
@@ -36,19 +35,15 @@ export default class SignUpComponent extends Component {
       <div>
         <Formik
           onSubmit={this.onSubmit}
-          validateOnChange={false}
+          /*validateOnChange={false}
           validateOnBlue={false}
-          validate={this.validate}
+          validate={this.validate}*/
         >
 
           <Form className="form-signup w-25 mx-auto">
             <h1 className="h3 mb-3 font-weight-normal">Sign Up</h1>
-            <ErrorMessage name="name" component="div"       className="alert alert-warning" />
             <ErrorMessage name="username" component="div" className="alert alert-warning" />
             <ErrorMessage name="password" component="div" className="alert alert-warning" />
-            <fieldset className="form-group">
-              <Field className="form-control" type="text" name="name" placeholder="Name" />
-            </fieldset>
             <fieldset className="form-group">
               <Field className="form-control" type="text" name="username" placeholder="Username" />
             </fieldset>

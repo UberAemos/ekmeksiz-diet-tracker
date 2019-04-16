@@ -8,7 +8,7 @@ class UserDataService {
   }
 
   createUser(user) {
-    return axios.post(`${API_URL}/users/register`, user)
+    return axios.post(`${API_URL}/register`, user)
   }
 }
 
