@@ -38,6 +38,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.ignoring()
 			.antMatchers("/h2-console/**/**");
 	}
-	
-
 }

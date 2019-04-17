@@ -8,10 +8,11 @@ export default class SignUpComponent extends Component {
 
     this.createUser = this.createUser.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
-    //this.validate = this.validate.bind(this)
+    this.validate = this.validate.bind(this)
   }
 
   createUser(values) {
+    this.setState({hi : "hello"})
     let user = {
       username: values.username,
       password: values.password
@@ -27,7 +28,26 @@ export default class SignUpComponent extends Component {
 
   validate(values) {
     let user = this.createUser(values)
-    return UserDataService.validateUser(user)
+
+    return UserDataService.validateUser(user).then(response => {
+      let errors = {}
+      if(!values.username) {
+        errors.username = "Enter a Username"
+      } else if (values.username.length < 6 || values.username.length > 12) {
+        errors.username = "Enter a Username between 6 or 12 characters"
+      } else if (response.data) {
+        errors.username = "Username exists"
+      }
+  
+      if(!values.password) {
+        errors.password = "Enter a Password"
+      } else if (values.password.length < 6 || values.password.length > 12) {
+        errors.password = "Enter a Password between 6 or 12 characters"
+      }
+      if (Object.keys(errors).length) {
+        throw errors
+      }
+    })
   }
 
   render() {
@@ -35,9 +55,9 @@ export default class SignUpComponent extends Component {
       <div>
         <Formik
           onSubmit={this.onSubmit}
-          /*validateOnChange={false}
-          validateOnBlue={false}
-          validate={this.validate}*/
+          validateOnChange={false}
+          validateOnBlur={false}
+          validate={this.validate}
         >
 
           <Form className="form-signup w-25 mx-auto">

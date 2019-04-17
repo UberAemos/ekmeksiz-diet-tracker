@@ -3,12 +3,12 @@ import {API_URL} from '../Constants'
 
 class UserDataService {
 
-  validateUser(user) {
-    return axios.post(`${API_URL}/users/register/validate`, user)
-  }
-
   createUser(user) {
     return axios.post(`${API_URL}/register`, user)
+  }
+
+  validateUser(user) {
+    return axios.post(`${API_URL}/register/validate`, user)
   }
 }
 
