@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import AuthenticationService from '../api/AuthenticationService'
 
 export default class HeaderComponent extends Component {
+  
   render() {
+    let username = AuthenticationService.getLoggedInUsername()
     return (
         
       <header className="navbar navbar-expand-lg navbar-dark bg-dark">
       <ul className="navbar-nav">
       <li className="nav-item">
-      <a className="navbar-brand" href="/home">Ekmeksiz</a>
+      <a className="navbar-brand" href={"/" + username}>Ekmeksiz</a>
       </li>
       <li className="nav-item">
-      <Link className="nav-link" to="/home">Home</Link>
+      <Link className="nav-link" to={"/" + username}>Home</Link>
       </li>
       <li className="nav-item">
       <Link className="nav-link" to="/recipe">Recipes</Link>
@@ -22,7 +25,7 @@ export default class HeaderComponent extends Component {
       </ul>
       <ul className="navbar-nav navbar-collapse justify-content-end">
       <li className="nav-item mr-4">
-      <span className="navbar-text">Hello, Guest</span>
+      <span className="navbar-text">Hello, {"/" + username}</span>
       </li>
       <li className="nav-item">
       <Link className="nav-link" to="/login">Login</Link>

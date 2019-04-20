@@ -15,16 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uberaemos.ekmeksizdiettracker.auth.model.User;
 import com.uberaemos.ekmeksizdiettracker.auth.security.AuthenticationException;
 
 @RestController
 @CrossOrigin(origins ="http://localhost:3000")
 public class AuthenticationController {
-
+/*
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
-	/*
+	
 	@PostMapping("${jwt.get.token.uri}")
 	public ResponseEntity<?> createAuthenticationToken(
 			@RequestBody TokenRequest authenticationRequest) throws AuthenticationException {
@@ -37,20 +38,21 @@ public class AuthenticationController {
 		final String token = tokenUtil.generateToken(userDetails);
 		
 		return ResponseEntity.ok(new TokenResponse(token));
-	}*/
+	}
 
 	@PostMapping("/login")
-	private void authenticate(@RequestBody String username, @RequestBody String password) {
-		Objects.requireNonNull(username);
-		Objects.requireNonNull(password);
+	public ResponseEntity authenticate(@RequestBody User user) {
 		
 		try {
 			authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(username, password));
+					new UsernamePasswordAuthenticationToken(
+							user.getUsername(), user.getPassword()));
+			
 		} catch (DisabledException e) {
 			throw new AuthenticationException("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
 			throw new AuthenticationException("INVALID_CREDENTIALS", e);
 		}
 	}
+	*/
 }

@@ -11,31 +11,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uberaemos.ekmeksizdiettracker.auth.model.User;
 import com.uberaemos.ekmeksizdiettracker.auth.repository.UserRepository;
+import com.uberaemos.ekmeksizdiettracker.auth.service.UserService;
 
 @CrossOrigin(origins="http://localhost:3000")
 @RestController
-public class UserResource {
+public class UserController {
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+	private UserService service;
     
 	@PostMapping("/register")
 	public ResponseEntity<User> registerUser(
 			@RequestBody User user) {
-		
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		User createdUser = userRepository.save(user);
+		User createdUser = service.save(user);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
 	@PostMapping("/register/validate") 
-		public Boolean validateUser(
+		public ResponseEntity<Boolean> validateUser(
 				@RequestBody User user) {
-		
-		return userRepository.existsByUsername(user.getUsername());
+		Boolean exists = service.exists(user.getUsername()); 
+		return new ResponseEntity<Boolean>(exists, HttpStatus.NO_CONTENT);
 	}
-
 }
