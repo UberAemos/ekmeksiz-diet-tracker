@@ -8,7 +8,7 @@ export default class HeaderComponent extends Component {
     let username = AuthenticationService.getLoggedInUsername()
     return (
         
-      <header className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <header className="navbar navbar-expand-lg navbar-dark bg-dark mb-auto">
       <ul className="navbar-nav">
       <li className="nav-item">
       <a className="navbar-brand" href={"/" + username}>Ekmeksiz</a>

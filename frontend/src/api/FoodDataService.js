@@ -1,9 +1,11 @@
 import axios from 'axios'
-import {API_URL} from '../Constants'
+import {API_URL, EDAMAM_ID, EDAMAM_KEY, EDAMAM_URL} from '../Constants'
+
 
 class FoodDataService {
     searchFood(food) {
-        return axios.post(`${API_URL}/foods`, food)
+        let url = EDAMAM_URL + food + "&app_id=" + EDAMAM_ID + "&app_key=" + EDAMAM_KEY
+        return axios.get(url)
     }
 
     addFood(username, course, food) {

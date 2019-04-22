@@ -11,7 +11,7 @@ import WelcomeComponent from "./WelcomeComponent";
 export default class Ekmeksiz extends Component {
   render() {
     return (
-      <div>
+      <div className="d-flex w-100 h-100 mx-auto flex-column justify-content-center">
         <Router>
           <>
           <HeaderComponent />
