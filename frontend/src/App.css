@@ -15,3 +15,13 @@ html {
 #root {
   height: 100%;
 }
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: 75%;
+  width: 75%;
+  overflow: hidden;
+  margin: 5px auto;
+  /*h-75 w-75 mx-auto overflow-hidden d-flex flex-column my-2*/
+}

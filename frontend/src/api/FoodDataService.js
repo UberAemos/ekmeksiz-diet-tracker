@@ -1,19 +1,32 @@
 import axios from 'axios'
-import {API_URL, EDAMAM_ID, EDAMAM_KEY, EDAMAM_URL} from '../Constants'
+import {API_URL, EDAMAM_ID, EDAMAM_KEY, EDAMAM_URL, EDAMAM_NUTRIENTS_URL} from '../Constants'
 
 
 class FoodDataService {
+    /* Edamam parser request */
     searchFood(food) {
-        let url = EDAMAM_URL + food + "&app_id=" + EDAMAM_ID + "&app_key=" + EDAMAM_KEY
+        let url = `${EDAMAM_URL}${food}&app_id=${EDAMAM_ID}&app_key=${EDAMAM_KEY}`
         return axios.get(url)
     }
 
-    addFood(username, course, food) {
-        return axios.post(`${API_URL}/foods/${username}/${course}`, food)
+    /* Edamam nutrition data request */
+    getNutrients(quantity, measureURI, foodId) {
+        let request = {
+            ingredients : [{
+                quantity,
+                measureURI,
+                foodId
+            }]
+        }
+        return axios.post(EDAMAM_NUTRIENTS_URL, request)
     }
 
-    getFoods(username) {
-        return axios.get(`${API_URL}/foods/${username}`)
+    addFood(username, date, course, food) {
+        return axios.post(`${API_URL}/users/${username}/${date}/${course}`, food)
+    }
+
+    getFoods(username, date) {
+        return axios.get(`${API_URL}/users/${username}/${date}`)
     }
 }
 

@@ -20,12 +20,9 @@ public class EkmeksizUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		try {
-			Optional<User> user = repository.findByUsername(username);
-			if (!user.isPresent()) {
-				throw new UsernameNotFoundException("No user found with username: " + username);
-			}
-			User myUser = user.get();
-			return new EkmeksizUserDetails(myUser.getId(), myUser.getUsername(), myUser.getPassword(), "USER");
+			User user = repository.findByUsername(username);
+
+			return new EkmeksizUserDetails(user.getId(), user.getUsername(), user.getPassword(), "USER");
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}

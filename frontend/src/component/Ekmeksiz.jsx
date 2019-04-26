@@ -5,7 +5,7 @@ import LoginComponent from "./LoginComponent"
 import HomeComponent from "./home/HomeComponent"
 import HeaderComponent from "./HeaderComponent";
 import FooterComponent from "./FooterComponent";
-import AddFood from "./home/AddFood";
+import AddFoodComponent from "./home/addFood/AddFoodComponent";
 import WelcomeComponent from "./WelcomeComponent";
 
 export default class Ekmeksiz extends Component {
@@ -19,7 +19,7 @@ export default class Ekmeksiz extends Component {
               <Route path="/signup" component={SignUpComponent} />
               <Route path="/login" component={LoginComponent}
               />
-              <Route path="/:username/:course" component={AddFood} />
+              <Route path="/:username/:date/:course/" component={AddFoodComponent} />
               <Route path="/:username" component={HomeComponent} />
               <Route path="/" component={WelcomeComponent} />
             </Switch>

@@ -27,7 +27,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 	
-	public Optional<User> findByUsername(String username) {
+	public User findByUsername(String username) {
 		return repository.findByUsername(username);
 	}
 	

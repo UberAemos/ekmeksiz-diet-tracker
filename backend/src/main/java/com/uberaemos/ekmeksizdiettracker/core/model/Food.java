@@ -1,10 +1,12 @@
 package com.uberaemos.ekmeksizdiettracker.core.model;
 
+import java.util.Map;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,24 +22,33 @@ public class Food {
 	private String name;
 	
 	@JsonIgnore
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
 	private User user;
+	
+	@JsonIgnore
+	@ManyToOne
+	private DailyDiet dailyDiet;
+	
+	@JsonIgnore
+	@ManyToOne
+	private Course course;
+	
+	@ElementCollection
+	private Map<String, Float> nutrition;
+	
+	private Float serving;
+	private String measure;
 
 	protected Food() {
 		
 	}
 	
-	public Food(String name) {
+	public Food(String name, Map<String, Float> nutrition, Float serving, String measure) {
 		super();
 		this.name = name;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+		this.nutrition = nutrition;
+		this.serving = serving;
+		this.measure = measure;
 	}
 
 	public Long getId() {
@@ -55,9 +66,52 @@ public class Food {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Map<String, Float> getNutrition() {
+		return nutrition;
+	}
 
-	@Override
-	public String toString() {
-		return "Food [id=" + id + ", name=" + name + "]";
+	public void setNutrition(Map<String, Float> nutrition) {
+		this.nutrition = nutrition;
+	}
+
+	public Float getServing() {
+		return serving;
+	}
+
+	public void setServing(Float serving) {
+		this.serving = serving;
+	}
+
+	public String getMeasure() {
+		return measure;
+	}
+
+	public void setMeasure(String measure) {
+		this.measure = measure;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public DailyDiet getDailyDiet() {
+		return dailyDiet;
+	}
+
+	public void setDailyDiet(DailyDiet dailyDiet) {
+		this.dailyDiet = dailyDiet;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 }
