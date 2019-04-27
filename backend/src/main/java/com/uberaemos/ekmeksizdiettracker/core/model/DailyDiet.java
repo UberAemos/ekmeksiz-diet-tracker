@@ -34,6 +34,10 @@ public class DailyDiet {
 	public DailyDiet(String date) {
 		super();
 		this.date = date;
+		this.courses.add(new Course("breakfast"));
+		this.courses.add(new Course("lunch"));
+		this.courses.add(new Course("dinner"));
+		this.courses.add(new Course("snacks"));
 	}
 
 	public Long getId() {

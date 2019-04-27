@@ -12,13 +12,7 @@ export default class HomeComponent extends Component {
     super(props);
 
     this.state = {
-      date: "",
-      courses : {
-        breakfast: [],
-        lunch: [],
-        dinner: [],
-        snacks: []
-      }
+      date: ""
     }
 
     this.previousDay = this.previousDay.bind(this);
@@ -99,32 +93,41 @@ export default class HomeComponent extends Component {
               <th className="border-bottom border-dark">Sugar</th>
             </tr>
           </thead>
+          {(this.state.courses) &&
           <tbody>
             <MealCourse
+              onDelete={() => this.getFoods(this.state.date)}
               courseName="breakfast"
               history={this.props.history}
               mealList={this.state.courses.breakfast}
               date={moment(this.state.date).format("YYYYMMDD")}
             />
             <MealCourse
+              onDelete={() => this.getFoods(this.state.date)}
               history={this.props.history}
               courseName="lunch"
               mealList={this.state.courses.lunch}
               date={moment(this.state.date).format("YYYYMMDD")}
             />
             <MealCourse
+              onDelete={() => this.getFoods(this.state.date)}
               history={this.props.history}
               courseName="dinner"
               mealList={this.state.courses.dinner}
               date={moment(this.state.date).format("YYYYMMDD")}
             />
             <MealCourse
+              onDelete={() => this.getFoods(this.state.date)}
               courseName="snacks"
               history={this.props.history}
               mealList={this.state.courses.snacks}
               date={moment(this.state.date).format("YYYYMMDD")}
             />
+            <tr>
+
+            </tr>
           </tbody>
+          }
         </table>
       </div>
     );

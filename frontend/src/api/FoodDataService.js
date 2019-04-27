@@ -28,6 +28,10 @@ class FoodDataService {
     getFoods(username, date) {
         return axios.get(`${API_URL}/users/${username}/${date}`)
     }
+
+    deleteFood(username, date, course, id) {
+        return axios.delete(`${API_URL}/users/${username}/${date}/${course}/${id}`)
+    }
 }
 
 export default new FoodDataService()

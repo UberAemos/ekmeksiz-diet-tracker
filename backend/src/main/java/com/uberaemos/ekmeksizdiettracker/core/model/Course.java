@@ -80,4 +80,14 @@ public class Course {
 	public void addFood(Food food) {
 		this.foodList.add(food);
 	}
+	
+	public void deleteFood(Food deleteFood) {
+		for (int i = 0; i < this.foodList.size(); i++) {
+			Food food = this.foodList.get(i);
+			if (food.getId() == deleteFood.getId()) {
+				this.foodList.remove(i);
+				break;
+			}
+		}
+	}
 }

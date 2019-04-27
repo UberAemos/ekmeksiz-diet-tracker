@@ -11,10 +11,10 @@ export default class HeaderComponent extends Component {
       <header className="navbar navbar-expand-lg navbar-dark bg-dark mb-auto">
       <ul className="navbar-nav">
       <li className="nav-item">
-      <a className="navbar-brand" href={"/" + username}>Ekmeksiz</a>
+      <a className="navbar-brand" href={"/"}>Ekmeksiz</a>
       </li>
       <li className="nav-item">
-      <Link className="nav-link" to={"/" + username}>Home</Link>
+      <Link className="nav-link" to={"/"}>Home</Link>
       </li>
       <li className="nav-item">
       <Link className="nav-link" to="/recipe">Recipes</Link>
