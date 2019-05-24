@@ -4,6 +4,7 @@ import SearchFoodComponent from "./SearchFoodComponent"
 import SelectFoodComponent from "./SelectFoodComponent";
 import SelectedFoodComponent from "./SelectedFoodComponent";
 import AuthenticationService from "../../../api/AuthenticationService";
+import LocalFoodDataService from "../../../api/LocalFoodDataService";
 
 export default class AddFood extends Component {
   constructor(props) {
@@ -28,12 +29,21 @@ export default class AddFood extends Component {
   }
 
   onSelectedSubmit(food, course) {
-    FoodDataService.addFood(
-      this.props.match.params.username,
-      this.props.match.params.date,
-      course,
-      food
-    ).then(() => this.props.history.push(`/${AuthenticationService.getLoggedInUsername()}`))
+    if (AuthenticationService.isUserLoggedIn()) {
+      FoodDataService.addFood(
+        this.props.match.params.username,
+        this.props.match.params.dateName,
+        course,
+        food
+      ).then(() => this.props.history.push(`/${AuthenticationService.getLoggedInUsername()}`))
+    } else {
+      LocalFoodDataService.addFood(
+        this.props.match.params.dateName,
+        course,
+        food
+      )
+      this.props.history.push(`/${AuthenticationService.getLoggedInUsername()}`)
+    }
   }
 
   render() {
@@ -45,7 +55,7 @@ export default class AddFood extends Component {
         </h3>
         <SearchFoodComponent onSubmit={this.onSearchSubmit} />
         {this.state.foods && (
-          <div className="d-flex flex-column">
+          <div className="d-flex flex-column h-75">
             <h5 className="d-flex mb-2">Matching Foods: </h5>
             <div className="d-flex flex-row">
               <SelectFoodComponent foods={this.state.foods}

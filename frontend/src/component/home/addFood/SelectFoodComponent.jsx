@@ -21,7 +21,7 @@ export default class SelectFoodComponent extends Component {
 
   render() {
     return (
-      <ul className="w-50 h-100 list-group overflow-auto mb-1 flex-shrink-1 border border-dark mr-2">
+      <ul className="w-50 h-100 list-group overflow-auto flex-shrink-1 border border-dark mr-2">
         {this.state.foods.hints.map((food, index) => (
           <button
             key={index}

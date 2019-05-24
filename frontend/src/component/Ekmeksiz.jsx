@@ -19,7 +19,7 @@ export default class Ekmeksiz extends Component {
               <Route path="/signup" component={SignUpComponent} />
               <Route path="/login" component={LoginComponent}
               />
-              <Route path="/:username/:date/:course/" component={AddFoodComponent} />
+              <Route path="/:username/:dateName/:course/" component={AddFoodComponent} />
               <Route path="/:username" component={HomeComponent} />
               <Route path="/" component={WelcomeComponent} />
             </Switch>

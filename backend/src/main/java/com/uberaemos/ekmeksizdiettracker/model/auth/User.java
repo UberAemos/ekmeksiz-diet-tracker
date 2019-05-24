@@ -1,16 +1,15 @@
-package com.uberaemos.ekmeksizdiettracker.auth.model;
+package com.uberaemos.ekmeksizdiettracker.model.auth;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.uberaemos.ekmeksizdiettracker.core.model.Course;
-import com.uberaemos.ekmeksizdiettracker.core.model.DailyDiet;
-import com.uberaemos.ekmeksizdiettracker.core.model.Food;
+import com.uberaemos.ekmeksizdiettracker.model.DailyDiet;
 
 @Entity
 public class User {
@@ -22,7 +21,7 @@ public class User {
 	private String username;
 	private String password;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	private List<DailyDiet> dietList = new ArrayList<DailyDiet>();
 
 	protected User() {
@@ -63,16 +62,22 @@ public class User {
 	}
 
 	public void addDietList(DailyDiet dailyDiet) {
-		this.dietList.add(dailyDiet);
+		dailyDiet.setUser(this);
+		dietList.add(dailyDiet);
 	}
 	
-	public void setDailyDiet(DailyDiet newDiet) {
+	public void deleteDiet(DailyDiet dailyDiet) {
+		dailyDiet.setUser(null);
+		dietList.remove(dailyDiet);
+	}
+	
+	public DailyDiet getDailyDiet(String dietName) {
 		for (int i = 0; i < dietList.size(); i++) {
-			if (dietList.get(i).getDate() == newDiet.getDate()) {
-				dietList.set(i, newDiet);
+			DailyDiet diet = dietList.get(i);
+			if (diet.getDate() == dietName) {
+				return diet;
 			}
 		}
+		return new DailyDiet(dietName);
 	}
-	
-	
 }

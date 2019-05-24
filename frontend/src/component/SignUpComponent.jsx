@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
-import UserDataService from '../api/UserDataService'
+import AuthenticationService from '../api/AuthenticationService'
 
 export default class SignUpComponent extends Component {
   constructor(props) {
@@ -22,14 +22,14 @@ export default class SignUpComponent extends Component {
 
   onSubmit(values) {
     let user = this.createUser(values)
-    UserDataService.createUser(user)
+    AuthenticationService.createUser(user)
       .then(() => this.props.history.push('/login'))
   }
 
   validate(values) {
     let user = this.createUser(values)
 
-    return UserDataService.validateUser(user).then(response => {
+    return AuthenticationService.validateUser(user).then(response => {
       let errors = {}
       if(!values.username) {
         errors.username = "Enter a Username"

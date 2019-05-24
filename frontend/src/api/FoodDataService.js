@@ -25,8 +25,12 @@ class FoodDataService {
         return axios.post(`${API_URL}/users/${username}/${date}/${course}`, food)
     }
 
-    getFoods(username, date) {
+    getDate(username, date) {
         return axios.get(`${API_URL}/users/${username}/${date}`)
+    }
+
+    getDefaultDate(date) {
+        return axios.get(`${API_URL}/guest/${date}`)
     }
 
     deleteFood(username, date, course, id) {

@@ -1,4 +1,4 @@
-package com.uberaemos.ekmeksizdiettracker.core.model;
+package com.uberaemos.ekmeksizdiettracker.model;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.uberaemos.ekmeksizdiettracker.auth.model.User;
+import com.uberaemos.ekmeksizdiettracker.model.auth.User;
 
 @Entity
 public class Food {
@@ -20,14 +20,6 @@ public class Food {
 	private Long id;
 	
 	private String name;
-	
-	@JsonIgnore
-	@ManyToOne
-	private User user;
-	
-	@JsonIgnore
-	@ManyToOne
-	private DailyDiet dailyDiet;
 	
 	@JsonIgnore
 	@ManyToOne
@@ -91,27 +83,36 @@ public class Food {
 		this.measure = measure;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public DailyDiet getDailyDiet() {
-		return dailyDiet;
-	}
-
-	public void setDailyDiet(DailyDiet dailyDiet) {
-		this.dailyDiet = dailyDiet;
-	}
-
 	public Course getCourse() {
 		return course;
 	}
 
 	public void setCourse(Course course) {
 		this.course = course;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Food other = (Food) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 }

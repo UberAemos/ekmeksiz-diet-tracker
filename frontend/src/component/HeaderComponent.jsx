@@ -25,14 +25,23 @@ export default class HeaderComponent extends Component {
       </ul>
       <ul className="navbar-nav navbar-collapse justify-content-end">
       <li className="nav-item mr-4">
-      <span className="navbar-text">Hello, {"/" + username}</span>
+      <span className="navbar-text">Hello, {username}</span>
       </li>
-      <li className="nav-item">
-      <Link className="nav-link" to="/login">Login</Link>
-      </li>
-      <li className="nav-item">
-      <Link className="nav-link" to="/logout">Logout</Link>
-      </li>
+      {!AuthenticationService.isUserLoggedIn() &&
+        <li className="nav-item">
+          <Link className="nav-link" to="/login">Login</Link>
+        </li>
+      }
+      {!AuthenticationService.isUserLoggedIn() &&
+        <li className="nav-item">
+          <Link className="nav-link" to="/signup">Sign Up</Link>
+        </li>
+      }
+      {AuthenticationService.isUserLoggedIn() &&
+        <li className="nav-item">
+          <Link className="nav-link" to="/logout">Logout</Link>
+        </li>
+      }
       </ul>
       </header>
     )

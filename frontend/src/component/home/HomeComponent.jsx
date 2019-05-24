@@ -3,63 +3,96 @@ import MealCourse from "./MealCourse";
 import FoodDataService from "../../api/FoodDataService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
+import AuthenticationService from "../../api/AuthenticationService";
+import LocalFoodDataService from "../../api/LocalFoodDataService";
 
 export default class HomeComponent extends Component {
   constructor(props) {
-    if (props.username === "") {
-      props.username = "Guest";
-    }
     super(props);
 
     this.state = {
-      date: ""
-    }
+      date: "",
+      error: ""
+    };
 
     this.previousDay = this.previousDay.bind(this);
     this.nextDay = this.nextDay.bind(this);
-    this.makeCourses = this.makeCourses.bind(this);
-    this.getFoods = this.getFoods.bind(this)
+    this.getDate = this.getDate.bind(this);
+    this.deleteFood = this.deleteFood.bind(this)
   }
 
   componentWillMount() {
     let date = moment();
-    this.getFoods(date)
+    this.getDate(date);
   }
 
   previousDay() {
-    let date = moment(this.state.date).subtract(1, "days")
-    this.getFoods(date)
+    if (AuthenticationService.isUserLoggedIn()) {
+      let date = moment(this.state.date).subtract(1, "days");
+      this.getDate(date);
+    } else {
+      this.setState({
+        error : "You have to login to create other diet plans"
+      })
+    }
   }
 
   nextDay() {
-    let date = moment(this.state.date).add(1, "days")
-    this.getFoods(date)
-  }
-
-  makeCourses(courseList) {
-    let courses = {
-      breakfast: [],
-      lunch: [],
-      dinner: [],
-      snacks: []
-    };
-    for (let i = 0; i < courseList.length; i++) {
-      let course = courseList[i];
-      courses[course.name] = course.foodList;
-    }
-    return courses;
-  }
-
-  getFoods(date) {
-    FoodDataService.getFoods(
-      this.props.match.params.username,
-      moment(date).format("YYYYMMDD")
-    ).then(response => {
+    if (AuthenticationService.isUserLoggedIn()) {
+      let date = moment(this.state.date).add(1, "days");
+      this.getDate(date);
+    } else {
       this.setState({
-        courses: this.makeCourses(response.data),
-        date
+        error : "You have to login to create other diet plans"
       })
-    })
+    }
+  }
+
+  getDate(date) {
+    let dateName = moment(date).format("YYYYMMDD");
+    if (AuthenticationService.isUserLoggedIn()) {
+      FoodDataService.getDate(this.props.match.params.username, dateName).then(
+        response => {
+          this.setState({
+            date: response.data
+          });
+        }
+      )
+    } else {
+      if (LocalFoodDataService.getDate(dateName)) {
+        this.setState({
+          date: LocalFoodDataService.getDate(dateName)
+        });
+      } else {
+        FoodDataService.getDefaultDate(dateName).then(
+          response => {
+            this.setState({
+              date: response.data
+            });
+            sessionStorage.setItem(dateName, JSON.stringify(response.data))
+          }
+        );
+      }
+    }
+  }
+
+  deleteFood(username, dateName, course, id, name) {
+    if (AuthenticationService.isUserLoggedIn()) {
+      FoodDataService.deleteFood(username, dateName, course, id).then(
+        response => {
+          this.setState({
+            date: response.data
+          })
+        }
+      )
+    } else {
+      let dateObj = LocalFoodDataService.deleteFood(dateName, course, name)
+      this.setState({
+        date : dateObj
+      })
+      dateObj = JSON.stringify(dateObj);
+      sessionStorage.setItem(dateName, dateObj);
+    }
   }
 
   render() {
@@ -74,13 +107,16 @@ export default class HomeComponent extends Component {
               <FontAwesomeIcon icon="caret-left" />
             </button>
             <span className="mx-1 text-primary">
-              {moment(this.state.date).format("dddd, MMMM Do, YYYY")}
+              {moment(this.state.date.date).format("dddd, MMMM Do, YYYY")}
             </span>
             <button className="btn btn-primary" onClick={this.nextDay}>
               <FontAwesomeIcon icon="caret-right" />
             </button>
           </div>
         </div>
+        {(this.state.error) && (
+            <span className="text-danger">{this.state.error}</span>
+          )} 
         <table className="table-sm mx-1">
           <thead>
             <tr>
@@ -93,40 +129,25 @@ export default class HomeComponent extends Component {
               <th className="border-bottom border-dark">Sugar</th>
             </tr>
           </thead>
-          {(this.state.courses) &&
-          <tbody>
-            <MealCourse
-              onDelete={() => this.getFoods(this.state.date)}
-              courseName="breakfast"
-              history={this.props.history}
-              mealList={this.state.courses.breakfast}
-              date={moment(this.state.date).format("YYYYMMDD")}
-            />
-            <MealCourse
-              onDelete={() => this.getFoods(this.state.date)}
-              history={this.props.history}
-              courseName="lunch"
-              mealList={this.state.courses.lunch}
-              date={moment(this.state.date).format("YYYYMMDD")}
-            />
-            <MealCourse
-              onDelete={() => this.getFoods(this.state.date)}
-              history={this.props.history}
-              courseName="dinner"
-              mealList={this.state.courses.dinner}
-              date={moment(this.state.date).format("YYYYMMDD")}
-            />
-            <MealCourse
-              onDelete={() => this.getFoods(this.state.date)}
-              courseName="snacks"
-              history={this.props.history}
-              mealList={this.state.courses.snacks}
-              date={moment(this.state.date).format("YYYYMMDD")}
-            />
-            <tr>
-
-            </tr>
-          </tbody>
+          {(this.state.date) && 
+            <tbody>
+              {this.state.date.courses.map((course, index) => (
+                <MealCourse
+                  key = {index}
+                  course= {course}
+                  history={this.props.history}
+                  date={moment(this.state.date.date).format("YYYYMMDD")}
+                  onDelete = {this.deleteFood}
+                />
+              ))}
+              {(Object.keys(this.state.date.total).length > 0) &&
+                <tr>
+                  <th className="text-primary font-weight-normal">Total: </th>
+                  {Object.keys(this.state.date.total).map(key => (
+                    <th className="text-primary font-weight-normal">{this.state.date.total[key]}</th>
+                  ))}
+                </tr>}
+            </tbody>
           }
         </table>
       </div>
