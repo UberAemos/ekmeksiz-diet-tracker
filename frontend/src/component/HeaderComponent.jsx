@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 import AuthenticationService from '../api/AuthenticationService'
 
 export default class HeaderComponent extends Component {
+  constructor(props) {
+    super(props)
+
+    this.logout = this.logout.bind(this)
+  }
+
+  logout() {
+    AuthenticationService.logout()
+  }
   
   render() {
     let username = AuthenticationService.getLoggedInUsername()
@@ -39,7 +48,7 @@ export default class HeaderComponent extends Component {
       }
       {AuthenticationService.isUserLoggedIn() &&
         <li className="nav-item">
-          <Link className="nav-link" to="/logout">Logout</Link>
+          <Link className="nav-link" onClick={this.logout}>Logout</Link>
         </li>
       }
       </ul>

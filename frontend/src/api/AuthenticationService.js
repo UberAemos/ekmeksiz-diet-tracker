@@ -22,10 +22,6 @@ class AuthenticationService {
         axios.interceptors.request.eject()
         window.location.pathname = "/"
     }
-
-    validateUser(signupForm) {
-        return axios.post(`${API_URL}/auth/validate`, signupForm)
-    }
     
     loginUser(loginForm) {
         return axios.post(`${API_URL}/auth/signin`, loginForm)

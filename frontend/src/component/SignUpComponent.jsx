@@ -12,10 +12,17 @@ export default class SignUpComponent extends Component {
   }
 
   createUser(values) {
-    this.setState({hi : "hello"})
+    let role
+    if (values.role) {
+      role = ["pm"]
+    } else {
+      role = ["user"]
+    }
     let user = {
       username: values.username,
-      password: values.password
+      password: values.password,
+      role: role,
+      diet: JSON.parse(sessionStorage.getItem(sessionStorage.key(0)))
     }
     return user
   }
@@ -24,30 +31,23 @@ export default class SignUpComponent extends Component {
     let user = this.createUser(values)
     AuthenticationService.createUser(user)
       .then(() => this.props.history.push('/login'))
+    sessionStorage.clear()
   }
 
   validate(values) {
-    let user = this.createUser(values)
+    let errors = {}
+    if(!values.username) {
+      errors.username = "Enter a Username"
+    } else if (values.username.length < 6) {
+      errors.username = "Enter a Username more than 6 characters"
+    }
 
-    return AuthenticationService.validateUser(user).then(response => {
-      let errors = {}
-      if(!values.username) {
-        errors.username = "Enter a Username"
-      } else if (values.username.length < 6 || values.username.length > 12) {
-        errors.username = "Enter a Username between 6 or 12 characters"
-      } else if (response.data) {
-        errors.username = "Username exists"
-      }
-  
-      if(!values.password) {
-        errors.password = "Enter a Password"
-      } else if (values.password.length < 6 || values.password.length > 12) {
-        errors.password = "Enter a Password between 6 or 12 characters"
-      }
-      if (Object.keys(errors).length) {
-        throw errors
-      }
-    })
+    if(!values.password) {
+      errors.password = "Enter a Password"
+    } else if (values.password.length < 6 || values.password.length > 12) {
+      errors.password = "Enter a Password between 6 or 12 characters"
+    }
+    return errors
   }
 
   render() {
@@ -59,7 +59,6 @@ export default class SignUpComponent extends Component {
           validateOnBlur={false}
           validate={this.validate}
         >
-
           <Form className="form-signup w-25 mx-auto">
             <h1 className="h3 mb-3 font-weight-normal">Sign Up</h1>
             <ErrorMessage name="username" component="div" className="alert alert-warning" />
@@ -70,7 +69,11 @@ export default class SignUpComponent extends Component {
             <fieldset className="form-group">
               <Field className="form-control" type="text" name="password" placeholder="Password" />
             </fieldset>
-            <button type="submit" className="btn btn-success">Sign Up</button>
+            <fieldset>
+              <span>I want Premium features  </span>
+              <Field type="checkbox" name="role"/>
+            </fieldset>
+            <button type="submit" className="btn btn-success mt-2">Sign Up</button>
           </Form>
         </Formik>
       </div>

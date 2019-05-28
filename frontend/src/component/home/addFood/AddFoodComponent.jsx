@@ -35,7 +35,14 @@ export default class AddFood extends Component {
         this.props.match.params.dateName,
         course,
         food
-      ).then(() => this.props.history.push(`/${AuthenticationService.getLoggedInUsername()}`))
+      ).then(response => this.props.history.push(
+        {
+          pathname: `/${AuthenticationService.getLoggedInUsername()}`,
+          state: {
+            date: response.data
+          }
+        }
+      ))
     } else {
       LocalFoodDataService.addFood(
         this.props.match.params.dateName,

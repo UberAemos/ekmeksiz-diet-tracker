@@ -1,10 +1,10 @@
 package com.uberaemos.ekmeksizdiettracker.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
@@ -33,7 +33,7 @@ public class Course {
 	private List<Food> foodList = new ArrayList<Food>();
 	
 	@ElementCollection
-	private Map<String, Float> total;
+	private Map<String, Float> total = new HashMap<>();
 
 	protected Course() {
 		super();
@@ -91,9 +91,10 @@ public class Course {
 	}
 	
 	public void calculateTotal() {
-		Iterator<String> nutritionIterator = foodList.get(0).getNutrition().keySet().iterator();
+		total = new HashMap<>();
 		for (int i = 0; i < foodList.size(); i++) {
 			Food food = foodList.get(i);
+			Iterator<String> nutritionIterator = food.getNutrition().keySet().iterator();
 			while (nutritionIterator.hasNext()) {
 				String nutritionKey = nutritionIterator.next();
 				Float nutritionValue = food.getNutrition().get(nutritionKey);

@@ -3,11 +3,11 @@ import {API_URL} from '../Constants'
 
 class AdminService {
     getUsers() {
-        return axios.get(`${API_URL}/admin/users`)
+        return axios.get(`${API_URL}/admin`)
     }
 
     deleteUser(id) {
-        return axios.delete(`${API_URL}/admin/users/${id}`)
+        return axios.delete(`${API_URL}/admin/${id}`)
     }
 }
 

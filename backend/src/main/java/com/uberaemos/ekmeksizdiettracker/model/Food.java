@@ -4,13 +4,11 @@ import java.util.Map;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.uberaemos.ekmeksizdiettracker.model.auth.User;
 
 @Entity
 public class Food {

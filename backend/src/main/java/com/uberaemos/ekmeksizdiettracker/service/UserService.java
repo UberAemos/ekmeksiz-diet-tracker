@@ -20,7 +20,7 @@ public class UserService {
 	private FoodRepository foodRepository;
 	
 	public DailyDiet getDate(String username, String dietName) {
-		User user = userRepository.findByUsername(username);
+		User user = userRepository.findByUsername(username).get();
 		return user.getDailyDiet(dietName);
 	}
 	
@@ -29,13 +29,17 @@ public class UserService {
 			String courseName,
 			Food food) {
 		
-		User user = userRepository.findByUsername(username);
+		User user = userRepository.findByUsername(username).get();
 		DailyDiet diet = user.getDailyDiet(dietDate);
 		Course course = diet.getCourse(courseName);
 		course.addFood(food);
 		diet.calculateTotal();
-		User newUser = userRepository.save(user);
-		return newUser.getDailyDiet(dietDate);
+		if (!user.containsDiet(dietDate)) {
+			user.addDietList(diet);
+		}
+		
+		user = userRepository.save(user);
+		return user.getDailyDiet(dietDate);
 	}
 	
 	public DailyDiet deleteFood(String username, 
@@ -44,7 +48,7 @@ public class UserService {
 			Long foodId) {
 		
 		Food deleteFood = foodRepository.findById(foodId).get();
-		User user = userRepository.findByUsername(username);
+		User user = userRepository.findByUsername(username).get();
 		DailyDiet diet = user.getDailyDiet(dietDate);
 		Course course = diet.getCourse(courseName);
 		course.deleteFood(deleteFood);

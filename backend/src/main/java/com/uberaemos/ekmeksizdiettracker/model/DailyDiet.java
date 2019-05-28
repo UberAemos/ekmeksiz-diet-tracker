@@ -1,6 +1,7 @@
 package com.uberaemos.ekmeksizdiettracker.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class DailyDiet {
 	private List<Course> courses = new ArrayList<Course>();
 	
 	@ElementCollection
-	private Map<String, Float> total;
+	private Map<String, Float> total = new HashMap<>();
 
 	protected DailyDiet() {
 		super();
@@ -42,10 +43,10 @@ public class DailyDiet {
 	public DailyDiet(String date) {
 		super();
 		this.date = date;
-		this.courses.add(new Course("breakfast"));
-		this.courses.add(new Course("lunch"));
-		this.courses.add(new Course("dinner"));
-		this.courses.add(new Course("snacks"));
+		this.addCourse(new Course("breakfast"));
+		this.addCourse(new Course("lunch"));
+		this.addCourse(new Course("dinner"));
+		this.addCourse(new Course("snacks"));
 	}
 
 	public Long getId() {
@@ -85,10 +86,11 @@ public class DailyDiet {
 	}
 	
 	public void calculateTotal() {
+		total = new HashMap<>();
 		for (int i = 0; i < courses.size(); i++) {
 			Course course = courses.get(i);
-			course.calculateTotal();	
-			if (!course.getTotal().isEmpty()) {
+			if (course.getFoodList().size() > 0) {
+				course.calculateTotal();	
 				Set<String> nutritionKeys = course.getTotal().keySet();
 				Iterator<String> nutritionIterator = nutritionKeys.iterator();
 				while (nutritionIterator.hasNext()) {
@@ -107,7 +109,7 @@ public class DailyDiet {
 	public Course getCourse(String courseName) {
 		for (int i = 0; i < courses.size(); i++) {
 			Course course = courses.get(i);
-			if (course.getName() == courseName) {
+			if (course.getName().equalsIgnoreCase(courseName)) {
 				return course;
 			}
 		}

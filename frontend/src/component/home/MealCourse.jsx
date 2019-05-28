@@ -5,10 +5,10 @@ import { NUTRIENT_LABELS } from "../../Constants";
 export default class MealCourse extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       course: this.props.course
     };
+
     this.addFoodClicked = this.addFoodClicked.bind(this);
     this.deleteFoodClicked = this.deleteFoodClicked.bind(this);
   }
@@ -60,7 +60,7 @@ export default class MealCourse extends Component {
         {(this.state.course.foodList).length > 1 && (
           <tr>
             <th className="text-primary font-weight-normal">Total: </th>
-            {Object.keys(this.state.course.total).map(key => (
+            {NUTRIENT_LABELS.map(key => (
               <th className="text-primary font-weight-normal">
                 {this.state.course.total[key]}
               </th>

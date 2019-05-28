@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import AuthenticationService from "../../api/AuthenticationService";
 import LocalFoodDataService from "../../api/LocalFoodDataService";
+import { NUTRIENT_LABELS } from "../../Constants";
 
 export default class HomeComponent extends Component {
   constructor(props) {
@@ -21,14 +22,14 @@ export default class HomeComponent extends Component {
     this.deleteFood = this.deleteFood.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let date = moment();
     this.getDate(date);
   }
 
   previousDay() {
     if (AuthenticationService.isUserLoggedIn()) {
-      let date = moment(this.state.date).subtract(1, "days");
+      let date = moment(this.state.date.date).subtract(1, "days");
       this.getDate(date);
     } else {
       this.setState({
@@ -39,7 +40,7 @@ export default class HomeComponent extends Component {
 
   nextDay() {
     if (AuthenticationService.isUserLoggedIn()) {
-      let date = moment(this.state.date).add(1, "days");
+      let date = moment(this.state.date.date).add(1, "days");
       this.getDate(date);
     } else {
       this.setState({
@@ -59,7 +60,7 @@ export default class HomeComponent extends Component {
         }
       )
     } else {
-      if (LocalFoodDataService.getDate(dateName)) {
+      if (sessionStorage.length > 0) {
         this.setState({
           date: LocalFoodDataService.getDate(dateName)
         });
@@ -143,7 +144,7 @@ export default class HomeComponent extends Component {
               {(Object.keys(this.state.date.total).length > 0) &&
                 <tr>
                   <th className="text-primary font-weight-normal">Total: </th>
-                  {Object.keys(this.state.date.total).map(key => (
+                  {NUTRIENT_LABELS.map(key => (
                     <th className="text-primary font-weight-normal">{this.state.date.total[key]}</th>
                   ))}
                 </tr>}
