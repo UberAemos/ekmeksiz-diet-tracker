@@ -56,9 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().
                 authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/guest/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()	// Permit all OPTIONS requests
+                .antMatchers("/auth/**").permitAll()			// Authentication requests do not require any Authorization
+                .antMatchers("/guest/**").permitAll()			// Guest requests do not require any Authorization
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

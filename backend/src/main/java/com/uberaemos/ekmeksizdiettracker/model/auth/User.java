@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 
 import com.uberaemos.ekmeksizdiettracker.model.DailyDiet;
 
+/**
+ * Model for registered Ekmeksiz-Diet-App user
+ */
 @Entity
 public class User {
 	
@@ -25,17 +28,26 @@ public class User {
 	@GeneratedValue
 	private Long id;
 	
+	// Unique username of the user
 	private String username;
+	// Encoded password of the user
 	private String password;
+	// The date when the user is registered
 	private Date registerDate;
+	// The date when the user has loginned last
 	private Date loginDate;
 	
+	/**
+	 * List of user roles that authorize the user in
+	 * using certain services
+	 */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", 
       joinColumns = @JoinColumn(name = "user_id"), 
       inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 	
+    // List of DailyDiet objects saved by the user
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	private List<DailyDiet> dietList = new ArrayList<DailyDiet>();
 

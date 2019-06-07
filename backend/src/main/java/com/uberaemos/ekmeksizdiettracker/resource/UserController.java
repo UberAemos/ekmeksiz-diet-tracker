@@ -16,6 +16,9 @@ import com.uberaemos.ekmeksizdiettracker.model.DailyDiet;
 import com.uberaemos.ekmeksizdiettracker.model.Food;
 import com.uberaemos.ekmeksizdiettracker.service.UserService;
 
+/**
+ * RestController for registered app users
+ */
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UserController {
@@ -23,9 +26,18 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
+	/**
+	 * Finds the given DailyDiet of the given User
+	 * @param username
+	 * Username for the registered user
+	 * @param date
+	 * Date in YYMMDD format for DailyDiet 
+	 * @return
+	 * The DailyDiet object
+	 */
 	@PreAuthorize("hasRole('USER') or hasRole('PM')")
 	@GetMapping("/users/{username}/{date}")
-	public ResponseEntity<DailyDiet> getCourses(
+	public ResponseEntity<DailyDiet> getDate(
 			@PathVariable(value="username") String username,
 			@PathVariable(value="date") String date) {
 		
@@ -34,6 +46,19 @@ public class UserController {
 		return new ResponseEntity<DailyDiet>(diet, HttpStatus.OK);
 	}
 	
+	/**
+	 * Adds the given food to the related course of the user
+	 * @param username
+	 * Username of registered user
+	 * @param dietDate
+	 * Date in YYMMDD format for the DailyDiet
+	 * @param courseName
+	 * Name of the course to save the food
+	 * @param food
+	 * Food object to add
+	 * @return
+	 * New DailyDiet object with the saved food object
+	 */
 	@PreAuthorize("hasRole('USER') or hasRole('PM')")
 	@PostMapping("/users/{username}/{date}/{course}")
 	public ResponseEntity<DailyDiet> addFood(
@@ -46,6 +71,19 @@ public class UserController {
 		return new ResponseEntity<DailyDiet>(newDailyDiet, HttpStatus.OK);
 	}
 	
+	/**
+	 * Deletes the food with given id from the related course of the user
+	 * @param username
+	 * Username of the registered user
+	 * @param dietDate
+	 * Date in YYMMDD format for the DailyDiet
+	 * @param courseName
+	 * Name of the course to delete the food from
+	 * @param foodId
+	 * Identification number of the Food in FoodRepository
+	 * @return
+	 * New DailyDiet object without the deleted food object
+	 */
 	@PreAuthorize("hasRole('USER') or hasRole('PM')")
 	@DeleteMapping("/users/{username}/{date}/{course}/{foodId}")
 	public ResponseEntity<DailyDiet> deleteFood(

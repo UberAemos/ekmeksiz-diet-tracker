@@ -2,16 +2,22 @@ package com.uberaemos.ekmeksizdiettracker.service;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import javax.naming.AuthenticationException;
+import javax.security.auth.login.LoginException;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.uberaemos.ekmeksizdiettracker.exception.UsernameAlreadyExistsException;
 import com.uberaemos.ekmeksizdiettracker.model.Course;
 import com.uberaemos.ekmeksizdiettracker.model.DailyDiet;
 import com.uberaemos.ekmeksizdiettracker.model.Food;
@@ -42,10 +48,11 @@ public class AuthenticationService {
     @Autowired
     private PasswordEncoder encoder;
 	
-	public void createUser(String username, String password, Set<String> strRoles, DailyDiet dailyDiet) {
+	public void createUser(String username, String password, Set<String> strRoles, DailyDiet dailyDiet) throws UsernameAlreadyExistsException {
         if(userRepository.existsByUsername(username)) {
-            throw new RuntimeException("Fail -> Username is already taken!");
+            throw new UsernameAlreadyExistsException("This username already exists");
         }
+        
 		// Creating user's account
         User user = new User(username, encoder.encode(password));
         user.setRegisterDate(new Date());
@@ -63,40 +70,48 @@ public class AuthenticationService {
         	user.addDietList(dailyDiet);
         }
  
-        strRoles.forEach(role -> {
-          switch(role) {
-          case "admin":
-            Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                  .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-            roles.add(adminRole);
-            
-            break;
-          case "pm":
-                Role pmRole = roleRepository.findByName(RoleName.ROLE_PM)
-                  .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-                roles.add(pmRole);
-                
-            break;
-          default:
-              Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                  .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-              roles.add(userRole);              
-          }
-        });
+        try {
+        	strRoles.forEach(role -> {
+        		switch(role) {
+        		case "admin":
+        			Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN).get();
+        			roles.add(adminRole);
+        			break;
+        			
+        		case "pm":
+        			Role pmRole = roleRepository.findByName(RoleName.ROLE_PM).get();
+        			roles.add(pmRole);
+        			break;
+        		
+        		default:
+        			Role userRole = roleRepository.findByName(RoleName.ROLE_USER).get();
+        			roles.add(userRole);
+        			break;
+        		}
+        	});
+        } catch(NoSuchElementException e) {
+        	throw new RuntimeException("User role not found");
+        	
+        }
         
         user.setRoles(roles);
         userRepository.save(user);
 	}
 	
-	public JwtResponse authenticateUser(String username, String password) {
+	public JwtResponse authenticateUser(String username, String password) throws LoginException {
 		Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        username,
-                        password
-                )
+			new UsernamePasswordAuthenticationToken(
+				username,
+                password
+			)
         );
 		
-		User user = userRepository.findByUsername(username).get();
+		Optional<User> userOptional = userRepository.findByUsername(username);
+		if (!userOptional.isPresent()) {
+			throw new LoginException(String.format("User with username %s does not exist", username));
+		}
+		
+		User user = userOptional.get();
 		user.setLoginDate(new Date());
 		user = userRepository.save(user);
 		Boolean isAdmin = user.getRoles().contains(new Role(RoleName.ROLE_ADMIN));

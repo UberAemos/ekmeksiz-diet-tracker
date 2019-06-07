@@ -17,19 +17,26 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uberaemos.ekmeksizdiettracker.model.auth.User;
-
+/**
+ * DailyDiet keeps the diet data for the given date. 
+ * Dailydiet has a course list and a list for total 
+ * nutrition values in the courses
+ */
 @Entity
 public class DailyDiet {
 	@Id
 	@GeneratedValue
 	private Long id;
 	
+	// Date in YYMMDD format that this diet object belongs to
 	private String date;
 	
+	// Which user that this diet belongs
 	@JsonIgnore
 	@ManyToOne
 	private User user;
 	
+	// Course List for this DailyDiet
 	@OneToMany(mappedBy = "dailyDiet", cascade = CascadeType.ALL)
 	private List<Course> courses = new ArrayList<Course>();
 	
@@ -40,6 +47,9 @@ public class DailyDiet {
 		super();
 	}
 
+	/**
+	 * DailyDiet by default is initialized with 4 default courses
+	 */
 	public DailyDiet(String date) {
 		super();
 		this.date = date;
@@ -85,6 +95,11 @@ public class DailyDiet {
 		return courses;
 	}
 	
+	/**
+	 * Calculates the total nutrition values in the course list.
+	 * This also calls the total calculation functions for every course
+	 * in course list.
+	 */
 	public void calculateTotal() {
 		total = new HashMap<>();
 		for (int i = 0; i < courses.size(); i++) {
@@ -106,6 +121,7 @@ public class DailyDiet {
 		}
 	}
 	
+	// Returns the course with given course name
 	public Course getCourse(String courseName) {
 		for (int i = 0; i < courses.size(); i++) {
 			Course course = courses.get(i);
@@ -116,6 +132,9 @@ public class DailyDiet {
 		return null;
 	}
 
+	/** Sets the given course's owner as the current dailydiet
+	 * and adds it to the current course list
+	 */
 	public void addCourse(Course course) {
 		course.setDailyDiet(this);
 		courses.add(course);

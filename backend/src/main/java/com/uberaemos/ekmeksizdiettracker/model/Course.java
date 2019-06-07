@@ -15,7 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+/**
+ * Course keeps a list of foods and list for their total nutrition scores
+ */
 @Entity
 public class Course {
 	
@@ -23,12 +25,15 @@ public class Course {
 	@GeneratedValue
 	private Long id;
 	
+	// Course name ie. breakfast, lunch...
 	private String name;
 	
+	// DailyDiet that this course belongs to
 	@JsonIgnore
 	@ManyToOne
 	private DailyDiet dailyDiet;
 	
+	// Food List within the course
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private List<Food> foodList = new ArrayList<Food>();
 	
@@ -90,6 +95,9 @@ public class Course {
 		this.total = total;
 	}
 	
+	/**
+	 * Calculates the total nutrition values for all foods in the course
+	 */
 	public void calculateTotal() {
 		total = new HashMap<>();
 		for (int i = 0; i < foodList.size(); i++) {

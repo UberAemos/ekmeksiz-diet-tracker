@@ -17,6 +17,12 @@ import com.uberaemos.ekmeksizdiettracker.service.AuthenticationService;
 @SpringBootApplication
 public class EkmeksizDietTrackerApplication {
 	
+	/**
+	 * Initializes the user roles in role repository
+	 * @param roleRepisotory
+	 * Repository for user roles
+	 * @return
+	 */
 	@Bean
 	CommandLineRunner initRoleData(RoleRepository roleRepisotory) {
 		return args -> {
@@ -26,6 +32,13 @@ public class EkmeksizDietTrackerApplication {
 		};
 	}
 	
+	/**
+	 * Initializes an admin user
+	 * @param userRepository
+	 * Repository for user objects
+	 * @param authenticationService
+	 * @return
+	 */
 	@Bean
 	CommandLineRunner initData(UserRepository userRepository, AuthenticationService authenticationService) {
 		return args -> {
@@ -38,5 +51,4 @@ public class EkmeksizDietTrackerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EkmeksizDietTrackerApplication.class, args);
 	}
-
 }
