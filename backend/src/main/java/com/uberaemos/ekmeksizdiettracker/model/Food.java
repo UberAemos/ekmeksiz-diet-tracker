@@ -1,116 +1,90 @@
 package com.uberaemos.ekmeksizdiettracker.model;
 
+import java.util.EnumMap;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.EnumType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyEnumerated;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Food {
-
-	@Id
-	@GeneratedValue
-	private Long id;
+public class Food extends Nutritious {
 	
 	private String name;
+	private Double quantity;
+	private String measure;
 	
 	@JsonIgnore
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+	@JoinColumn(name = "course_id")
 	private Course course;
 	
 	@ElementCollection
-	private Map<String, Float> nutrition;
+    @MapKeyEnumerated(EnumType.STRING)
+	private Map<Nutrient, Double> unitNutrients = new EnumMap<>(Nutrient.class);
 	
-	private Float serving;
-	private String measure;
-
 	protected Food() {
-		
 	}
 	
-	public Food(String name, Map<String, Float> nutrition, Float serving, String measure) {
-		super();
+	public Food(String name, 
+			Double quantity, 
+			String measure, 
+			Map<Nutrient, Double> totalNutrients) 
+	{
+		super(totalNutrients);
 		this.name = name;
-		this.nutrition = nutrition;
-		this.serving = serving;
+		this.quantity = quantity;
 		this.measure = measure;
+		makeUnitNutrients();
 	}
 
-	public Long getId() {
-		return id;
-	}
+	public String getName() {return name;}
+	public void setName(String name) {this.name = name;}
+	public String getMeasure() {return measure;}
+	public void setMeasure(String measure) {this.measure = measure;}
+	public Double getQuantity() {return quantity;}
+	public void setQuantity(Double quantity) {this.quantity = quantity;}
+	public Map<Nutrient, Double> getUnitNutrients() {return unitNutrients;}
+	public void setUnitNutrients(Map<Nutrient, Double> unitNutrients) {this.unitNutrients = unitNutrients;}
+	public Course getCourse() {	return course;}
+	public void setCourse(Course course) {this.course = course;	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	@Override
+	protected void addNutrients(Map<Nutrient, Double> nutrients) {
+		super.addNutrients(nutrients);
+		course.addNutrients(nutrients);
 	}
 	
-	public Map<String, Float> getNutrition() {
-		return nutrition;
-	}
-
-	public void setNutrition(Map<String, Float> nutrition) {
-		this.nutrition = nutrition;
-	}
-
-	public Float getServing() {
-		return serving;
-	}
-
-	public void setServing(Float serving) {
-		this.serving = serving;
-	}
-
-	public String getMeasure() {
-		return measure;
-	}
-
-	public void setMeasure(String measure) {
-		this.measure = measure;
-	}
-
-	public Course getCourse() {
-		return course;
-	}
-
-	public void setCourse(Course course) {
-		this.course = course;
-	}
-
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	protected void subtractNutrients(Map<Nutrient, Double> nutrients) {
+		super.subtractNutrients(nutrients);
+		course.subtractNutrients(nutrients);
+	}
+	
+	public void addQuantity() {
+		quantity++;
+		addNutrients(unitNutrients);
+	}
+	
+	public void subtractQuantity() {
+		quantity--;
+		subtractNutrients(unitNutrients);
+	}
+	
+	public void makeUnitNutrients() {
+		unitNutrients = multiplyNutrient(1.0 / quantity);
 	}
 
+	@JsonIgnore
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Food other = (Food) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public Nutritious highestContainer() {
+		return course.highestContainer();
 	}
 }

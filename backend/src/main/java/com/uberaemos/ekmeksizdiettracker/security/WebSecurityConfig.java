@@ -59,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.OPTIONS).permitAll()	// Permit all OPTIONS requests
                 .antMatchers("/auth/**").permitAll()			// Authentication requests do not require any Authorization
                 .antMatchers("/guest/**").permitAll()			// Guest requests do not require any Authorization
+                .antMatchers("/test/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
