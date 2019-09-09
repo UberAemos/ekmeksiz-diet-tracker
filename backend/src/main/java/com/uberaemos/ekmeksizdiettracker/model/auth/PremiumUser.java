@@ -7,6 +7,8 @@ import com.uberaemos.ekmeksizdiettracker.model.DailyDiet;
 @Entity
 public class PremiumUser extends RegisteredUser {
 	
+	protected PremiumUser() {}
+	
 	public PremiumUser(String username, String password) {
 		super(username, password, Role.ROLE_PM);
 	}

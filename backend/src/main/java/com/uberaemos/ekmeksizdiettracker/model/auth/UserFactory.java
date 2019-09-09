@@ -6,13 +6,13 @@ public class UserFactory {
 
 	public static User makeUser(SignupForm form) throws Exception {
 		switch(form.getRole()) {
-			case ROLE_USER:
+			case "USER":
 				return new FreeUser(form.getUsername(), form.getPassword(), form.getDiet());
-		case ROLE_PM:
+			case "PM":
 				return new PremiumUser(form.getUsername(), form.getPassword(), form.getDiet());
-		case ROLE_ADMIN:
+			case "ADMIN":
 				return new AdminUser(form.getUsername(), form.getPassword());
-		default:
+			default:
 				throw new Exception("Role name is invalid");
 				
 		}

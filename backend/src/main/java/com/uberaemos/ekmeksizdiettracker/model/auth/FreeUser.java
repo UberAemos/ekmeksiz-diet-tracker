@@ -8,6 +8,8 @@ import com.uberaemos.ekmeksizdiettracker.model.DailyDiet;
 @Entity
 public class FreeUser extends RegisteredUser {
 
+	protected FreeUser() {}
+	
 	/** Maximum number of DailyDiets an unpaid user can have */
 	private static int DIET_QUOTA = 10;
 	

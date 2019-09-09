@@ -1,6 +1,5 @@
 package com.uberaemos.ekmeksizdiettracker.resource;
 
-import javax.naming.AuthenticationException;
 import javax.security.auth.login.LoginException;
 import javax.validation.Valid;
 
@@ -12,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uberaemos.ekmeksizdiettracker.model.message.JwtResponse;
-import com.uberaemos.ekmeksizdiettracker.model.message.LoginForm;
-import com.uberaemos.ekmeksizdiettracker.model.message.SignupForm;
+import com.uberaemos.ekmeksizdiettracker.form.auth.JwtResponse;
+import com.uberaemos.ekmeksizdiettracker.form.auth.LoginForm;
+import com.uberaemos.ekmeksizdiettracker.form.auth.SignupForm;
 import com.uberaemos.ekmeksizdiettracker.service.AuthenticationService;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -37,7 +36,7 @@ public class AuthenticationController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) throws LoginException {
  
-        JwtResponse jwt = service.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
+        JwtResponse jwt = service.authenticateUser(loginRequest);
         return ResponseEntity.ok(jwt);
     }
  
@@ -47,15 +46,11 @@ public class AuthenticationController {
      * SignupForm with username, password, user roles, and optional diet
      * @return
      * !!!
-     * @throws AuthenticationException
-     * Throws authentication exception if the given username already exists
+     * @throws Exception 
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody SignupForm signUpRequest) throws AuthenticationException {
-        service.createUser(signUpRequest.getUsername(), 
-        		signUpRequest.getPassword(), 
-        		signUpRequest.getRole(), 
-        		signUpRequest.getDiet());
+    public ResponseEntity<String> registerUser(@Valid @RequestBody SignupForm signUpRequest) throws Exception {
+        service.createUser(signUpRequest);
         return ResponseEntity.ok().body("User registered successfully!");
     }
 }

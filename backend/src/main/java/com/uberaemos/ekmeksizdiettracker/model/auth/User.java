@@ -15,7 +15,7 @@ public abstract class User {
 	
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 	
 	/** Unique username of the user */
 	private String username;
@@ -41,8 +41,8 @@ public abstract class User {
 	/*
 	 * Getters & Setters
 	*/
-	public Long getId() {return id;}
-	public void setId(Long id) {this.id = id;}
+	public long getId() {return id;}
+	public void setId(long id) {this.id = id;}
 	public String getUsername() {return username;}
 	public void setUsername(String username) {this.username = username;}
 	public String getPassword() {return password;}
@@ -50,7 +50,6 @@ public abstract class User {
 	public Role getRole() {return role;}
 	public void setRoles(Role role) {this.role = role;}
 	
-	public Boolean isRegisteredUser() {
-		return this instanceof RegisteredUser;
-	}
+	public Boolean isRegisteredUser() {	return this instanceof RegisteredUser;}
+	public Boolean isAdmin() {	return this instanceof AdminUser;}
 }

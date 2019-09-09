@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uberaemos.ekmeksizdiettracker.model.auth.User;
 import com.uberaemos.ekmeksizdiettracker.repository.auth.UserRepository;
-import com.uberaemos.ekmeksizdiettracker.service.AdminService;
+import com.uberaemos.ekmeksizdiettracker.service.AdminUserService;
 
 /**
  * RESTController for Admin Services
@@ -26,7 +26,7 @@ import com.uberaemos.ekmeksizdiettracker.service.AdminService;
 public class AdminController {
 
 	@Autowired
-	private AdminService service;
+	private AdminUserService service;
 	
 	@Autowired
 	private UserRepository repository;

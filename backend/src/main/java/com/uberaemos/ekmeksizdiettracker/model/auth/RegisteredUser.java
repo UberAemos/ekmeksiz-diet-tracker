@@ -32,7 +32,8 @@ public abstract class RegisteredUser extends User {
 
 	public RegisteredUser(String username, String password, Role role, DailyDiet diet) {
 		super(username, password, role);
-		diet.fixDietInnerRelations();
+		diet.setInnerRelations();
+		diet.setUser(this);
 		dietList.put(diet.getDate(), diet);
 		registerDate = new Date();
 	}
@@ -58,7 +59,7 @@ public abstract class RegisteredUser extends User {
 		else return getNewDailyDiet(dietDate);
 	}
 	
-	private DailyDiet getNewDailyDiet(String dietDate) {
+	public DailyDiet getNewDailyDiet(String dietDate) {
 		DailyDiet newDiet = new DailyDiet(dietDate);
 		newDiet.setUser(this);
 		return newDiet;

@@ -25,6 +25,7 @@ public class GuestController {
 	 */
 	@GetMapping("/guest/{date}")
 	public ResponseEntity<DailyDiet> getDefaultDiet(@PathVariable(value = "date") String dietDate) {
-		return new ResponseEntity<DailyDiet>(new DailyDiet(dietDate), HttpStatus.OK);
+		DailyDiet dailyDiet = new DailyDiet(dietDate);
+		return new ResponseEntity<DailyDiet>(dailyDiet, HttpStatus.OK);
 	}
 }
