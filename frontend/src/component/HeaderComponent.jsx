@@ -25,12 +25,6 @@ export default class HeaderComponent extends Component {
       <li className="nav-item">
       <Link className="nav-link" to={"/"}>Home</Link>
       </li>
-      <li className="nav-item">
-      <Link className="nav-link" to="/recipe">Recipes</Link>
-      </li>
-      <li className="nav-item">
-      <Link className="nav-link" to="/report">Report</Link>
-      </li>
       </ul>
       <ul className="navbar-nav navbar-collapse justify-content-end">
       <li className="nav-item mr-4">

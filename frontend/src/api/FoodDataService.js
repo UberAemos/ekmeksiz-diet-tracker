@@ -21,20 +21,28 @@ class FoodDataService {
         return axios.post(EDAMAM_NUTRIENTS_URL, request)
     }
 
-    addFood(username, date, course, food) {
-        return axios.post(`${API_URL}/users/${username}/${date}/${course}`, food)
+    addFood(courseId, food) {
+        return axios.post(`${API_URL}/users/${courseId}`, food)
     }
 
-    getDate(username, date) {
+    getDailyDiet(username, date) {
         return axios.get(`${API_URL}/users/${username}/${date}`)
     }
 
-    getDefaultDate(date) {
+    getDefaultDailyDiet(date) {
         return axios.get(`${API_URL}/guest/${date}`)
     }
 
-    deleteFood(username, date, course, id) {
-        return axios.delete(`${API_URL}/users/${username}/${date}/${course}/${id}`)
+    deleteFood(foodId) {
+        return axios.delete(`${API_URL}/users/${foodId}`)
+    }
+
+    incrementFood(foodId) {
+        return axios.post(`${API_URL}/users/inc/${foodId}`)
+    }
+
+    subtractFood(foodId) {
+        return axios.post(`${API_URL}/users/sub/${foodId}`)
     }
 }
 

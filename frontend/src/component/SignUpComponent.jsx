@@ -14,9 +14,9 @@ export default class SignUpComponent extends Component {
   createUser(values) {
     let role
     if (values.role) {
-      role = ["pm"]
+      role = "PM"
     } else {
-      role = ["user"]
+      role = "USER"
     }
     let user = {
       username: values.username,

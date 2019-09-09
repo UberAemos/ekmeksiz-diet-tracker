@@ -1,6 +1,6 @@
 class LocalFoodDataService {
   addFood(dateName, course, food) {
-    let date = this.getDate(dateName)
+    let date = this.getDailyDiet(dateName)
     for (let i = 0; i < date.courses.length; i++) {
       if (date.courses[i].name === course) {
         food.course = date.courses[i].name;
@@ -12,7 +12,7 @@ class LocalFoodDataService {
     sessionStorage.setItem(dateName, date);
   }
 
-  getDate(dateName) {
+  getDailyDiet(dateName) {
     let date = sessionStorage.getItem(dateName);
     date = JSON.parse(date);
     return date;

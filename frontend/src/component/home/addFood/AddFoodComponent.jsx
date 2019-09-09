@@ -28,25 +28,20 @@ export default class AddFood extends Component {
     this.setState({ selection })
   }
 
-  onSelectedSubmit(food, course) {
+  onSelectedSubmit(food) {
     if (AuthenticationService.isUserLoggedIn()) {
       FoodDataService.addFood(
-        this.props.match.params.username,
-        this.props.match.params.dateName,
-        course,
+        this.props.location.state.course.id,
         food
       ).then(response => this.props.history.push(
         {
           pathname: `/${AuthenticationService.getLoggedInUsername()}`,
-          state: {
-            date: response.data
-          }
         }
       ))
     } else {
       LocalFoodDataService.addFood(
         this.props.match.params.dateName,
-        course,
+        this.props.location.state.course.name,
         food
       )
       this.props.history.push(`/${AuthenticationService.getLoggedInUsername()}`)
@@ -58,13 +53,13 @@ export default class AddFood extends Component {
       <main className="h-75 w-75 mx-auto overflow-hidden d-flex flex-column my-2">
         <h3 className="d-flex">
           Add food to
-          <span className="text-capitalize">&nbsp;{this.state.course}</span>
+          <span className="text-capitalize">&nbsp;{this.props.location.state.course.name}</span>
         </h3>
         <SearchFoodComponent onSubmit={this.onSearchSubmit} />
         {this.state.foods && (
           <div className="d-flex flex-column h-75">
             <h5 className="d-flex mb-2">Matching Foods: </h5>
-            <div className="d-flex flex-row">
+            <div className="d-flex flex-row h-100">
               <SelectFoodComponent foods={this.state.foods}
               onSubmit={this.onSelectSubmit} />
               {this.state.selection && 

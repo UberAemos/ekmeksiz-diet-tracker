@@ -38,7 +38,7 @@ export default class SearchFoodComponent extends Component {
             component="div"
             className="alert alert-warning"
           />
-          <div className="flex-row d-flex">
+          <div className="d-flex flex-row">
             <Field
               className="form-control mr-2"
               type="text"

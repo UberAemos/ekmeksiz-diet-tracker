@@ -11,6 +11,8 @@ export default class MealCourse extends Component {
 
     this.addFoodClicked = this.addFoodClicked.bind(this);
     this.deleteFoodClicked = this.deleteFoodClicked.bind(this);
+    this.incrementFoodClicked = this.incrementFoodClicked.bind(this);
+    this.subtractFoodClicked = this.subtractFoodClicked.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -20,17 +22,32 @@ export default class MealCourse extends Component {
   }
 
   addFoodClicked(course) {
-    let username = AuthenticationService.getLoggedInUsername();
-    let dateName = this.props.date;
-    let courseName = this.state.course.name;
-    this.props.history.push(`${username}/${dateName}/${courseName}`);
+    let username = AuthenticationService.getLoggedInUsername()
+    let dateName = this.props.date
+    let courseName = this.state.course.name
+    this.props.history.push(
+      {
+        pathname: `${username}/${dateName}/${courseName}`,
+        state: {
+          course: this.state.course
+        }
+      }
+    )
   }
 
-  deleteFoodClicked(id, name) {
-    let username = AuthenticationService.getLoggedInUsername();
-    let date = this.props.date;
-    let course = this.state.course.name;
-    this.props.onDelete(username, date, course, id, name);
+  deleteFoodClicked(foodId, foodName) {
+    let courseName = this.state.course.name;
+    this.props.onDelete(courseName, foodId, foodName);
+  }
+
+  incrementFoodClicked(foodId, foodName) {
+    let courseName = this.state.course.name;
+    this.props.onIncrement(courseName, foodId, foodName);
+  }
+
+  subtractFoodClicked(foodId, foodName) {
+    let courseName = this.state.course.name;
+    this.props.onSubtract(courseName, foodId, foodName);
   }
 
   render() {
@@ -39,22 +56,34 @@ export default class MealCourse extends Component {
         <tr>
           <th className="text-capitalize">{this.state.course.name}</th>
         </tr>
-        {this.state.course.foodList.map((meal, index) => (
+        {this.state.course.foodList.map((food, index) => (
           <tr key={index}>
+            <td className="text-capitalize">{food.name}, {food.measure}, {food.quantity}</td>
+            {NUTRIENT_LABELS.map((label, index) => {
+              return <td key={index}>{food.nutrients[label]}</td>;
+            })}
             <td>
-              <div className="d-flex flex-row align-items-center justify-content-center">
+              <div>
                 <button
-                  className="btn btn-danger"
-                  onClick={() => this.deleteFoodClicked(meal.id, meal.name)}
+                  className="btn btn-sm btn-success"
+                  onClick={() => this.incrementFoodClicked(food.id, food.name)}
                 >
-                  -
+                +
                 </button>
-                <span className="text-capitalize">{meal.name}</span>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={() => this.subtractFoodClicked(food.id, food.name)}
+                >
+                -
+                </button>
+                <button
+                  className="btn btn-sm btn-warning"
+                  onClick={() => this.deleteFoodClicked(food.id, food.name)}
+                >
+                x
+                </button>
               </div>
             </td>
-            {NUTRIENT_LABELS.map((label, index) => {
-              return <td key={index}>{meal.nutrition[label]}</td>;
-            })}
           </tr>
         ))}
         {(this.state.course.foodList).length > 1 && (
@@ -62,7 +91,7 @@ export default class MealCourse extends Component {
             <th className="text-primary font-weight-normal">Total: </th>
             {NUTRIENT_LABELS.map(key => (
               <th className="text-primary font-weight-normal">
-                {this.state.course.total[key]}
+                {this.state.course.nutrients[key]}
               </th>
             ))}
           </tr>

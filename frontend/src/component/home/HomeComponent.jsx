@@ -20,6 +20,8 @@ export default class HomeComponent extends Component {
     this.nextDay = this.nextDay.bind(this);
     this.getDate = this.getDate.bind(this);
     this.deleteFood = this.deleteFood.bind(this)
+    this.incrementFood = this.incrementFood.bind(this)
+    this.subtractFood = this.subtractFood.bind(this)
   }
 
   componentDidMount() {
@@ -52,7 +54,7 @@ export default class HomeComponent extends Component {
   getDate(date) {
     let dateName = moment(date).format("YYYYMMDD");
     if (AuthenticationService.isUserLoggedIn()) {
-      FoodDataService.getDate(this.props.match.params.username, dateName).then(
+      FoodDataService.getDailyDiet(this.props.match.params.username, dateName).then(
         response => {
           this.setState({
             date: response.data
@@ -60,12 +62,12 @@ export default class HomeComponent extends Component {
         }
       )
     } else {
-      if (sessionStorage.length > 0) {
+      if (sessionStorage.getItem(dateName) !== null) {
         this.setState({
-          date: LocalFoodDataService.getDate(dateName)
+          date: LocalFoodDataService.getDailyDiet(dateName)
         });
       } else {
-        FoodDataService.getDefaultDate(dateName).then(
+        FoodDataService.getDefaultDailyDiet(dateName).then(
           response => {
             this.setState({
               date: response.data
@@ -77,9 +79,9 @@ export default class HomeComponent extends Component {
     }
   }
 
-  deleteFood(username, dateName, course, id, name) {
+  deleteFood(courseName, foodId, foodName) {
     if (AuthenticationService.isUserLoggedIn()) {
-      FoodDataService.deleteFood(username, dateName, course, id).then(
+      FoodDataService.deleteFood(foodId).then(
         response => {
           this.setState({
             date: response.data
@@ -87,12 +89,50 @@ export default class HomeComponent extends Component {
         }
       )
     } else {
-      let dateObj = LocalFoodDataService.deleteFood(dateName, course, name)
+      let dateObj = LocalFoodDataService.deleteFood(courseName, foodName)
       this.setState({
         date : dateObj
       })
       dateObj = JSON.stringify(dateObj);
-      sessionStorage.setItem(dateName, dateObj);
+      sessionStorage.setItem(this.state.date.date, dateObj);
+    }
+  }
+
+  subtractFood(courseName, foodId, foodName) {
+    if (AuthenticationService.isUserLoggedIn()) {
+      FoodDataService.subtractFood(foodId).then(
+        response => {
+          this.setState({
+            date: response.data
+          })
+        }
+      )
+    } else {
+      let dateObj = LocalFoodDataService.deleteFood(courseName, foodName)
+      this.setState({
+        date : dateObj
+      })
+      dateObj = JSON.stringify(dateObj);
+      sessionStorage.setItem(this.state.date.date, dateObj);
+    }
+  }
+
+  incrementFood(courseName, foodId, foodName) {
+    if (AuthenticationService.isUserLoggedIn()) {
+      FoodDataService.incrementFood(foodId).then(
+        response => {
+          this.setState({
+            date: response.data
+          })
+        }
+      )
+    } else {
+      let dateObj = LocalFoodDataService.deleteFood(courseName, foodName)
+      this.setState({
+        date : dateObj
+      })
+      dateObj = JSON.stringify(dateObj);
+      sessionStorage.setItem(this.state.date.date, dateObj);
     }
   }
 
@@ -121,31 +161,33 @@ export default class HomeComponent extends Component {
         <table className="table-sm mx-1">
           <thead>
             <tr>
-              <th className="border-bottom border-dark">Meal Name</th>
+              <th className="border-bottom border-dark">Name</th>
               <th className="border-bottom border-dark">Calories</th>
               <th className="border-bottom border-dark">Carbs</th>
               <th className="border-bottom border-dark">Fat</th>
               <th className="border-bottom border-dark">Protein</th>
-              <th className="border-bottom border-dark">Sodium</th>
               <th className="border-bottom border-dark">Sugar</th>
+              <th className="border-bottom border-dark"></th>
             </tr>
           </thead>
           {(this.state.date) && 
             <tbody>
-              {this.state.date.courses.map((course, index) => (
+              {this.state.date.courseList.map((course, index) => (
                 <MealCourse
                   key = {index}
                   course= {course}
                   history={this.props.history}
                   date={moment(this.state.date.date).format("YYYYMMDD")}
                   onDelete = {this.deleteFood}
+                  onIncrement = {this.incrementFood}
+                  onSubtract = {this.subtractFood}
                 />
               ))}
-              {(Object.keys(this.state.date.total).length > 0) &&
+              {(Object.values(this.state.date.nutrients)[0] > 0) &&
                 <tr>
                   <th className="text-primary font-weight-normal">Total: </th>
                   {NUTRIENT_LABELS.map(key => (
-                    <th className="text-primary font-weight-normal">{this.state.date.total[key]}</th>
+                    <th className="text-primary font-weight-normal">{this.state.date.nutrients[key]}</th>
                   ))}
                 </tr>}
             </tbody>

@@ -8,32 +8,33 @@ export default class SelectedFoodComponent extends Component {
   constructor(props) {
     super(props)
 
+    this.props = {
+      label: ""
+    }
+
     this.addFood = this.addFood.bind(this)
   }
 
   addFood(values) {
     let nutrition = {}
+    let measure = JSON.parse(values.measure)
     FoodDataService.getNutrients(values.quantity, 
-      values.measure, 
+      measure.uri, 
       this.props.selection.food.foodId
       ).then(response => {
         for (let i = 0; i < NUTRIENT_LABELS.length; i++) {
           let label = NUTRIENT_LABELS[i]
-          if (response.data.totalNutrients[label]) {
-            nutrition[label] = Math.round(response.data.totalNutrients[label].quantity)
-          } else {
-            nutrition[label] = 0
-        }
+          nutrition[label] = Math.round(response.data.totalNutrients[label].quantity)
       }
       let food = {
         name: this.props.selection.food.label,
-        nutrition: nutrition,
-        serving: values.quantity,
-        measure: values.measure,
+        nutrients: nutrition,
+        quantity: values.quantity,
+        measure: measure.label
       }
 
       const { onSubmit } = this.props
-      onSubmit(food, values.course)
+      onSubmit(food)
     })
   }
 
@@ -42,8 +43,8 @@ export default class SelectedFoodComponent extends Component {
       <Formik
         initialValues={{
           measure: "",
-          quantity: "",
-          course: ""
+          label: "",
+          quantity: ""
         }}
         onSubmit={this.addFood}
       >
@@ -69,22 +70,12 @@ export default class SelectedFoodComponent extends Component {
               <Field name="measure" component="select" className="py-1 w-50">
                 <option value="" selected disabled hidden>Choose here</option>
                 {this.props.selection.measures.map((measure, index) => (
-                  <option key={index} value={measure.uri}>
+                  <option key={index} value={JSON.stringify(measure)}>
                     {measure.label}
                   </option>
                 ))}
               </Field>
             </div>
-          </div>
-          <div className="d-flex flex-column align-items-center w-75">
-            <span className="text-primary mb-2">To which meal?</span>
-            <Field component="select" className="form-control" name="course">
-              <option value="" selected disabled hidden>Choose here</option>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-              <option value="snacks">Snack</option>
-            </Field>
           </div>
           <button type="submit" className="btn btn-success w-50">
             Add Food
