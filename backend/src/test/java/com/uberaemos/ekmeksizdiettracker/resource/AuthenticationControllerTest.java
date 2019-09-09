@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uberaemos.ekmeksizdiettracker.model.message.SignupForm;
+import com.uberaemos.ekmeksizdiettracker.form.auth.SignupForm;
 import com.uberaemos.ekmeksizdiettracker.service.AuthenticationService;
 
 @RunWith(SpringRunner.class)
