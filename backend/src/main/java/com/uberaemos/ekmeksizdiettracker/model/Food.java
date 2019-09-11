@@ -12,7 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyEnumerated;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class Food extends Nutritious {
@@ -30,13 +32,14 @@ public class Food extends Nutritious {
     @MapKeyEnumerated(EnumType.STRING)
 	private Map<Nutrient, Double> unitNutrients = new EnumMap<>(Nutrient.class);
 	
-	protected Food() {
-	}
+	protected Food() {}
 	
-	public Food(String name, 
-			Double quantity, 
-			String measure, 
-			Map<Nutrient, Double> totalNutrients) 
+	@JsonCreator
+	public Food(
+			@JsonProperty("name") String name, 
+			@JsonProperty("quantity") Double quantity, 
+			@JsonProperty("measure") String measure, 
+			@JsonProperty("totalNutrients") Map<Nutrient, Double> totalNutrients) 
 	{
 		super(totalNutrients);
 		this.name = name;

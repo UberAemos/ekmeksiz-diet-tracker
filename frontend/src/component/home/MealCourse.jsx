@@ -21,7 +21,7 @@ export default class MealCourse extends Component {
     });
   }
 
-  addFoodClicked(course) {
+  addFoodClicked() {
     let username = AuthenticationService.getLoggedInUsername()
     let dateName = this.props.date
     let courseName = this.state.course.name
@@ -35,9 +35,9 @@ export default class MealCourse extends Component {
     )
   }
 
-  deleteFoodClicked(foodId, foodName) {
+  deleteFoodClicked(foodName, foodId) {
     let courseName = this.state.course.name;
-    this.props.onDelete(courseName, foodId, foodName);
+    this.props.onDelete(courseName, foodName, foodId);
   }
 
   incrementFoodClicked(foodId, foodName) {
@@ -60,7 +60,7 @@ export default class MealCourse extends Component {
           <tr key={index}>
             <td className="text-capitalize">{food.name}, {food.measure}, {food.quantity}</td>
             {NUTRIENT_LABELS.map((label, index) => {
-              return <td key={index}>{food.nutrients[label]}</td>;
+              return <td key={index}>{food.totalNutrients[label]}</td>;
             })}
             <td>
               <div>
@@ -78,7 +78,7 @@ export default class MealCourse extends Component {
                 </button>
                 <button
                   className="btn btn-sm btn-warning"
-                  onClick={() => this.deleteFoodClicked(food.id, food.name)}
+                  onClick={() => this.deleteFoodClicked(food.name, food.id)}
                 >
                 x
                 </button>
@@ -91,7 +91,7 @@ export default class MealCourse extends Component {
             <th className="text-primary font-weight-normal">Total: </th>
             {NUTRIENT_LABELS.map(key => (
               <th className="text-primary font-weight-normal">
-                {this.state.course.nutrients[key]}
+                {this.state.course.totalNutrients[key]}
               </th>
             ))}
           </tr>
@@ -100,7 +100,7 @@ export default class MealCourse extends Component {
           <td className="border-bottom">
             <button
               className="btn btn-primary btn-small"
-              onClick={() => this.addFoodClicked(this.state.course)}
+              onClick={() => this.addFoodClicked()}
             >
               Add Food
             </button>

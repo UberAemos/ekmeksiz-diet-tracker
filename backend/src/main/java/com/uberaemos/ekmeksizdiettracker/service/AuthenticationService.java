@@ -22,23 +22,12 @@ import com.uberaemos.ekmeksizdiettracker.security.jwt.JwtProvider;
 
 @Service
 public class AuthenticationService {
-	@Autowired
-	private RegisteredUserService registeredUserService;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-    private AuthenticationManager authenticationManager;
- 
-    @Autowired
-    private JwtProvider jwtProvider;
-	
-    @Autowired
-    private PasswordEncoder encoder;
+	@Autowired	private RegisteredUserService registeredUserService;
+	@Autowired	private UserRepository userRepository;
+	@Autowired	private UserService userService;
+	@Autowired  private AuthenticationManager authenticationManager;
+    @Autowired  private JwtProvider jwtProvider;
+    @Autowired  private PasswordEncoder encoder;
 	
 	public void createUser(SignupForm signupForm) throws Exception {
         isUsernameExist(signupForm);

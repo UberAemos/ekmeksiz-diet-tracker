@@ -79,7 +79,7 @@ export default class HomeComponent extends Component {
     }
   }
 
-  deleteFood(courseName, foodId, foodName) {
+  deleteFood(courseName, foodName, foodId) {
     if (AuthenticationService.isUserLoggedIn()) {
       FoodDataService.deleteFood(foodId).then(
         response => {
@@ -89,7 +89,8 @@ export default class HomeComponent extends Component {
         }
       )
     } else {
-      let dateObj = LocalFoodDataService.deleteFood(courseName, foodName)
+      let dateName = this.state.date.date
+      let dateObj = LocalFoodDataService.deleteFood(dateName, courseName, foodName)
       this.setState({
         date : dateObj
       })
@@ -183,11 +184,11 @@ export default class HomeComponent extends Component {
                   onSubtract = {this.subtractFood}
                 />
               ))}
-              {(Object.values(this.state.date.nutrients)[0] > 0) &&
+              {(Object.values(this.state.date.totalNutrients)[0] > 0) &&
                 <tr>
                   <th className="text-primary font-weight-normal">Total: </th>
                   {NUTRIENT_LABELS.map(key => (
-                    <th className="text-primary font-weight-normal">{this.state.date.nutrients[key]}</th>
+                    <th className="text-primary font-weight-normal">{this.state.date.totalNutrients[key]}</th>
                   ))}
                 </tr>}
             </tbody>

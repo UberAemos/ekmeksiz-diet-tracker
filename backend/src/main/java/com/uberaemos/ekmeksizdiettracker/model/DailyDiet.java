@@ -59,13 +59,13 @@ public final class DailyDiet extends Nutritious {
 	public void addCourse(Course course) {
 		course.setDailyDiet(this);
 		courseList.add(course);
-		addNutrients(course.getNutrients());
+		addNutrients(course.getTotalNutrients());
 	}
 	
 	public void deleteCourse(Course course) {
 		course.setDailyDiet(null);
 		courseList.remove(course);
-		subtractNutrients(course.getNutrients());
+		subtractNutrients(course.getTotalNutrients());
 	}
 	
 	public void setInnerRelations() {

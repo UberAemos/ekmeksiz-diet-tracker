@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.uberaemos.ekmeksizdiettracker.model.Course;
 import com.uberaemos.ekmeksizdiettracker.model.DailyDiet;
 import com.uberaemos.ekmeksizdiettracker.model.Food;
-import com.uberaemos.ekmeksizdiettracker.model.Nutritious;
 import com.uberaemos.ekmeksizdiettracker.model.auth.RegisteredUser;
 import com.uberaemos.ekmeksizdiettracker.model.auth.User;
 import com.uberaemos.ekmeksizdiettracker.repository.CourseRepository;
@@ -23,8 +22,6 @@ public class RegisteredUserService {
 	public DailyDiet addFood(
 			long courseId,
 			Food food) {
-		
-		food.makeUnitNutrients();
 		Course course = courseRepository.findById(courseId).get();
 		course.addFood(food);
 		Food newFood = foodRepository.save(food);
@@ -33,7 +30,6 @@ public class RegisteredUserService {
 	
 	public DailyDiet deleteFood(
 			Long foodId) {
-		
 		Food food = foodRepository.findById(foodId).get();
 		Course course = food.getCourse();
 		course.deleteFood(food);
@@ -42,7 +38,6 @@ public class RegisteredUserService {
 	}
 	
 	public DailyDiet incrementFood(Long foodId) {
-		
 		Food food = foodRepository.findById(foodId).get();
 		food.addQuantity();
 		Food newFood = foodRepository.save(food);

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
-//import { NUTRIENTS_RESPONSE } from "../../../Test"
 import { NUTRIENT_LABELS } from "../../../Constants";
 import FoodDataService from "../../../api/FoodDataService";
 
@@ -28,11 +27,10 @@ export default class SelectedFoodComponent extends Component {
       }
       let food = {
         name: this.props.selection.food.label,
-        nutrients: nutrition,
+        totalNutrients: nutrition,
         quantity: values.quantity,
         measure: measure.label
       }
-
       const { onSubmit } = this.props
       onSubmit(food)
     })

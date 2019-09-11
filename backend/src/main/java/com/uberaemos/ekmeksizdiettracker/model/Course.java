@@ -37,13 +37,13 @@ public final class Course extends Nutritious {
 	public void addFood(Food food) {
 		food.setCourse(this);
 		foodList.add(food);
-		addNutrients(food.getNutrients());
+		addNutrients(food.getTotalNutrients());
 	}
 	
 	public void deleteFood(Food food) {
 		food.setCourse(null);
 		foodList.remove(food);
-		subtractNutrients(food.getNutrients());
+		subtractNutrients(food.getTotalNutrients());
 	}
 	
 	public void setInnerRelations() {

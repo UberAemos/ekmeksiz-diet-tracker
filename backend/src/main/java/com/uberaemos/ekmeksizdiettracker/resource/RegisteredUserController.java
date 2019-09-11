@@ -20,12 +20,10 @@ import com.uberaemos.ekmeksizdiettracker.service.RegisteredUserService;
 /**
  * RestController for registered app users
  */
-@CrossOrigin(origins = "http://localhost:3000")
-@RestController
+@CrossOrigin(origins = "http://localhost:3000") @RestController
 public class RegisteredUserController {
 	
-	@Autowired
-	private RegisteredUserService registeredUserService;
+	@Autowired	private RegisteredUserService registeredUserService;
 	
 	/**
 	 * Finds the given DailyDiet of the given User

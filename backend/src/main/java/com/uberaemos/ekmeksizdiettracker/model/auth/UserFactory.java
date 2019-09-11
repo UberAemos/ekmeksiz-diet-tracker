@@ -14,7 +14,6 @@ public class UserFactory {
 				return new AdminUser(form.getUsername(), form.getPassword());
 			default:
 				throw new Exception("Role name is invalid");
-				
 		}
 	}
 

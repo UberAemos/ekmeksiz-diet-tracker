@@ -41,7 +41,7 @@ export default class AddFood extends Component {
     } else {
       LocalFoodDataService.addFood(
         this.props.match.params.dateName,
-        this.props.location.state.course.name,
+        this.props.match.params.course,
         food
       )
       this.props.history.push(`/${AuthenticationService.getLoggedInUsername()}`)
